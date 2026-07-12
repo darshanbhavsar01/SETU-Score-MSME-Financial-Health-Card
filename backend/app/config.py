@@ -23,7 +23,15 @@ REPO_ROOT: Path = Path(__file__).resolve().parents[2]
 
 DATA_DIR: Path = REPO_ROOT / "data"
 PARQUET_DIR: Path = DATA_DIR / "parquet"
+
+# Read-only seed DB (applicants queue), baked into the image at build time (§13).
 SQLITE_PATH: Path = DATA_DIR / "setu.db"
+
+# Writable runtime DB for scores/flags and the Gemini call-counter (§8). Kept
+# SEPARATE from the read-only seed so the container never writes to the baked
+# image files. On Cloud Run (read-only FS) point SETU_APP_DB at /tmp, e.g.
+#   SETU_APP_DB=/tmp/setu-app.db
+APP_DB_PATH: Path = Path(os.getenv("SETU_APP_DB", str(DATA_DIR / "app.db")))
 
 # Individual parquet datasets (DuckDB reads these directly; see §3).
 GST_PARQUET: Path = PARQUET_DIR / "gst_returns.parquet"
