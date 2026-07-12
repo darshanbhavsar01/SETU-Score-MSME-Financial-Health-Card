@@ -54,6 +54,47 @@ DEFAULT_HISTORY_MONTHS: int = 24
 # data (guardrail #2). Surfaced in the API response and UI footer.
 DATA_SOURCE_LABEL: str = "synthetic"
 
+# --- Scoring methodology constants (CLAUDE.md §6) ------------------------------
+# Sub-score weights. Each has a one-line rationale (guardrail: explainable core).
+# Must sum to 1.0 — asserted at import time below.
+SUBSCORE_WEIGHTS: dict[str, float] = {
+    "growth": 0.15,        # forward-looking repayment capacity from turnover trend
+    "stability": 0.20,     # predictable cash flow is the strongest repayment signal
+    "compliance": 0.15,    # filing discipline proxies governance & willingness to pay
+    "liquidity": 0.20,     # cash buffer to absorb shocks / service obligations
+    "concentration": 0.15, # customer diversification = revenue durability
+    "leverage": 0.15,      # existing debt burden (FOIR-like) constrains new credit
+}
+assert abs(sum(SUBSCORE_WEIGHTS.values()) - 1.0) < 1e-9, "SUBSCORE_WEIGHTS must sum to 1.0"
+
+# Composite is a 0–100 weighted average rescaled onto a 300–900 credit-score range.
+SCORE_SCALE_MIN: int = 300
+SCORE_SCALE_MAX: int = 900
+
+# Band thresholds on the 300–900 scale (§6).
+BANDS: list[tuple[str, int]] = [
+    ("HIGH_RISK", 450),   # score < 450
+    ("WATCH", 600),       # 450 ≤ score < 600
+    ("GOOD", 750),        # 600 ≤ score < 750
+    ("EXCELLENT", 10_000),  # score ≥ 750
+]
+
+# A hard fraud flag caps the composite here and forces REFER_FRAUD_REVIEW (§6).
+FRAUD_CAP_SCORE: int = 449
+
+# --- Cross-validation tolerances (§6) -----------------------------------------
+GST_BANK_TOLERANCE: float = 0.25     # declared vs bank credits, ±25% band per quarter
+GST_UPI_MAX_RATIO: float = 3.5       # declared / UPI volume above this is suspicious
+ROUND_NUMBER_UNIT: int = 100_000     # ₹1 lakh — round-figure filing detector unit
+ROUND_NUMBER_FRACTION: float = 0.5   # flag if ≥50% of filings are exact ₹1L multiples
+
+# --- Working-capital limit (§6) -----------------------------------------------
+LIMIT_MULTIPLE: float = 6.0          # k: months of verified net inflow extended
+LIMIT_MIN_INR: int = 50_000
+LIMIT_MAX_INR: int = 5_000_000       # persona-agnostic hard cap
+LIMIT_TENOR_MONTHS: int = 12
+LIMIT_ROUNDING_INR: int = 10_000     # round recommendation to a clean figure
+
 
 @dataclass(frozen=True)
 class Settings:
@@ -66,6 +107,10 @@ class Settings:
     # Hard cap on Gemini calls per process lifetime (§8).
     gemini_max_calls: int = 50
     gemini_max_output_tokens: int = 1000
+
+    # Expose the ground-truth persona in API responses. True for the demo/console;
+    # set SETU_PROD_MODE=true to hide it (prod-mode flag, §7).
+    expose_persona: bool = os.getenv("SETU_PROD_MODE", "false").lower() != "true"
 
 
 settings = Settings()

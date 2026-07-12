@@ -107,6 +107,9 @@ def _generate_one(
     for m, ts in enumerate(months):
         turnover[m] *= 1.0 + persona.seasonal_amplitude * _festive_factor(ts.month)
         turnover[m] *= 1.0 + rng.normal(0.0, persona.turnover_noise)
+    # Optional revenue floor (a declining firm stabilising rather than collapsing).
+    if persona.turnover_floor_fraction > 0:
+        turnover = np.maximum(turnover, persona.turnover_floor_fraction * persona.base_monthly_turnover)
     turnover = np.clip(turnover, 10_000.0, None)
 
     payer_w = _payer_weights(rng, persona)
