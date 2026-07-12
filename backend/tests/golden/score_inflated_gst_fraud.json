@@ -1,0 +1,73 @@
+{
+  "applicant_id": "MSME-0051",
+  "setu_score": 449,
+  "band": "HIGH_RISK",
+  "sub_scores": {
+    "growth": 95,
+    "stability": 40,
+    "compliance": 98,
+    "liquidity": 100,
+    "concentration": 81,
+    "leverage": 71
+  },
+  "reason_codes": [
+    {
+      "code": "VOLATILE_CASHFLOW",
+      "direction": "negative",
+      "evidence": "net inflow CV 0.51 — high volatility"
+    },
+    {
+      "code": "NEGATIVE_NET_MONTHS",
+      "direction": "negative",
+      "evidence": "1 month(s) with net cash outflow"
+    },
+    {
+      "code": "MODERATE_CONCENTRATION",
+      "direction": "negative",
+      "evidence": "top payer = 24% of UPI inflows (HHI 0.13)"
+    },
+    {
+      "code": "EPFO_LATE_FILINGS",
+      "direction": "negative",
+      "evidence": "1 of 24 EPFO contributions filed late"
+    },
+    {
+      "code": "MANAGEABLE_LEVERAGE",
+      "direction": "positive",
+      "evidence": "EMI = 18% of monthly inflow (FOIR)"
+    },
+    {
+      "code": "TURNOVER_GROWTH",
+      "direction": "positive",
+      "evidence": "blended turnover up 31% (YoY)"
+    }
+  ],
+  "cross_validation": {
+    "consistency_score": 0,
+    "flags": [
+      {
+        "code": "GST_VS_BANK",
+        "direction": "negative",
+        "evidence": "declared GST ₹7.71Cr vs bank credits ₹1.90Cr (4.1×) — over-declared in 8/8 quarters"
+      },
+      {
+        "code": "GST_VS_UPI",
+        "direction": "negative",
+        "evidence": "declared GST is 8.1× UPI settlement volume (expected ≲ 3.5×)"
+      },
+      {
+        "code": "ROUND_NUMBER",
+        "direction": "negative",
+        "evidence": "24/24 GST filings are exact ₹1L round figures"
+      }
+    ]
+  },
+  "limit_recommendation": {
+    "amount_inr": 0,
+    "tenor_months": 12,
+    "basis": "withheld pending fraud review (GST inflation flagged)"
+  },
+  "recommendation": "REFER_FRAUD_REVIEW",
+  "data_source": "synthetic",
+  "scored_at": "SEEDED"
+}

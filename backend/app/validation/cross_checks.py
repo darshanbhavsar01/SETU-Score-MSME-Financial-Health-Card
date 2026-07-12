@@ -90,7 +90,7 @@ def cross_validate(f: FeatureBundle) -> CrossValidationResult:
             "GST_VS_BANK",
             NEGATIVE,
             f"declared GST {_inr(total_gst)} vs bank credits {_inr(total_bank)} "
-            f"({overall_ratio:.1f}× ) — over-declared in {breached_quarters}/{total_quarters} quarters",
+            f"({overall_ratio:.1f}×) — over-declared in {breached_quarters}/{total_quarters} quarters",
         ))
 
     # --- GST_VS_UPI (UPI is a subset of bank flow, so honest ratios sit ~1.5–2×) ---

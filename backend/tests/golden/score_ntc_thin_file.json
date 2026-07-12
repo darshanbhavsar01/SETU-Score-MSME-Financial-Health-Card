@@ -1,0 +1,63 @@
+{
+  "applicant_id": "MSME-0041",
+  "setu_score": 734,
+  "band": "GOOD",
+  "sub_scores": {
+    "growth": 79,
+    "stability": 74,
+    "compliance": 95,
+    "liquidity": 100,
+    "concentration": 91,
+    "leverage": 100
+  },
+  "reason_codes": [
+    {
+      "code": "SHORT_HISTORY",
+      "direction": "negative",
+      "evidence": "only 8 months of history — trend less certain"
+    },
+    {
+      "code": "EPFO_LATE_FILINGS",
+      "direction": "negative",
+      "evidence": "1 of 8 EPFO contributions filed late"
+    },
+    {
+      "code": "MODERATE_CASHFLOW",
+      "direction": "positive",
+      "evidence": "net inflow CV 0.23"
+    },
+    {
+      "code": "TURNOVER_GROWTH",
+      "direction": "positive",
+      "evidence": "blended turnover up 18% (4m vs prior)"
+    },
+    {
+      "code": "DIVERSIFIED_PAYERS",
+      "direction": "positive",
+      "evidence": "well-diversified payer base (HHI 0.06)"
+    },
+    {
+      "code": "STRONG_LIQUIDITY",
+      "direction": "positive",
+      "evidence": "cash covers 6.7× monthly fixed obligations"
+    }
+  ],
+  "cross_validation": {
+    "consistency_score": 100,
+    "flags": [
+      {
+        "code": "SOURCES_CONSISTENT",
+        "direction": "positive",
+        "evidence": "GST, bank & UPI inflows reconcile (consistency 100/100)"
+      }
+    ]
+  },
+  "limit_recommendation": {
+    "amount_inr": 490000,
+    "tenor_months": 12,
+    "basis": "6 × avg verified monthly net inflow (₹71,045, min of GST & bank) × stability multiplier 1.14; capped at 2× gross inflow and ₹5,000,000"
+  },
+  "recommendation": "APPROVE_WITH_LIMIT",
+  "data_source": "synthetic",
+  "scored_at": "SEEDED"
+}

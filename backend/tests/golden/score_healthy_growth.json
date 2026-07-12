@@ -1,0 +1,63 @@
+{
+  "applicant_id": "MSME-0001",
+  "setu_score": 809,
+  "band": "EXCELLENT",
+  "sub_scores": {
+    "growth": 100,
+    "stability": 48,
+    "compliance": 92,
+    "liquidity": 100,
+    "concentration": 92,
+    "leverage": 84
+  },
+  "reason_codes": [
+    {
+      "code": "VOLATILE_CASHFLOW",
+      "direction": "negative",
+      "evidence": "net inflow CV 0.47 — high volatility"
+    },
+    {
+      "code": "GST_LATE_FILINGS",
+      "direction": "negative",
+      "evidence": "3 of 24 GSTR-3B filed late"
+    },
+    {
+      "code": "MANAGEABLE_LEVERAGE",
+      "direction": "positive",
+      "evidence": "EMI = 10% of monthly inflow (FOIR)"
+    },
+    {
+      "code": "DIVERSIFIED_PAYERS",
+      "direction": "positive",
+      "evidence": "well-diversified payer base (HHI 0.06)"
+    },
+    {
+      "code": "TURNOVER_GROWTH",
+      "direction": "positive",
+      "evidence": "blended turnover up 39% (YoY)"
+    },
+    {
+      "code": "STRONG_LIQUIDITY",
+      "direction": "positive",
+      "evidence": "cash covers 15.9× monthly fixed obligations"
+    }
+  ],
+  "cross_validation": {
+    "consistency_score": 100,
+    "flags": [
+      {
+        "code": "SOURCES_CONSISTENT",
+        "direction": "positive",
+        "evidence": "GST, bank & UPI inflows reconcile (consistency 100/100)"
+      }
+    ]
+  },
+  "limit_recommendation": {
+    "amount_inr": 1360000,
+    "tenor_months": 12,
+    "basis": "6 × avg verified monthly net inflow (₹229,588, min of GST & bank) × stability multiplier 0.99; capped at 2× gross inflow and ₹5,000,000"
+  },
+  "recommendation": "APPROVE_WITH_LIMIT",
+  "data_source": "synthetic",
+  "scored_at": "SEEDED"
+}

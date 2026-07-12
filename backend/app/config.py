@@ -82,6 +82,12 @@ BANDS: list[tuple[str, int]] = [
 # A hard fraud flag caps the composite here and forces REFER_FRAUD_REVIEW (§6).
 FRAUD_CAP_SCORE: int = 449
 
+# Policy overlay: single-customer dependence is a material risk regardless of other
+# strengths, so an extreme UPI payer concentration caps the composite in the WATCH
+# band (§5: "concentration flag drives it down").
+CONCENTRATION_CAP_TOP_SHARE: float = 0.65
+CONCENTRATION_CAP_SCORE: int = 599
+
 # --- Cross-validation tolerances (§6) -----------------------------------------
 GST_BANK_TOLERANCE: float = 0.25     # declared vs bank credits, ±25% band per quarter
 GST_UPI_MAX_RATIO: float = 3.5       # declared / UPI volume above this is suspicious
