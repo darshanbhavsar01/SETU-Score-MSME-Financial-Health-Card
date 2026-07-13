@@ -107,6 +107,28 @@ def test_trend_endpoint(client):
     assert len(client.get("/applicants/MSME-0041/trend").json()) == 8
 
 
+def test_narrative_endpoint_defaults_to_template(client):
+    # ENABLE_LLM_NARRATIVE defaults false, so this never touches the network — the
+    # narrative source must be "template" and the text must mention the score.
+    resp = client.post("/narrative/MSME-0001")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["applicant_id"] == "MSME-0001"
+    assert body["source"] == "template"
+    assert "809" in body["narrative"]
+
+
+def test_narrative_scores_on_demand_if_not_already_scored(client):
+    # No prior POST /score/MSME-0002 — /narrative must score it itself and persist.
+    resp = client.post("/narrative/MSME-0002")
+    assert resp.status_code == 200
+    assert client.get("/score/MSME-0002").status_code == 200
+
+
+def test_narrative_unknown_applicant_404(client):
+    assert client.post("/narrative/MSME-9999").status_code == 404
+
+
 def test_validate_endpoint(client):
     fraud = client.post("/validate/MSME-0051").json()
     assert fraud["consistency_score"] == 0

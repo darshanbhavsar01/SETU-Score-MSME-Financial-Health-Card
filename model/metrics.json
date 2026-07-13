@@ -1,0 +1,45 @@
+{
+  "random_seed": 42,
+  "trained_at": "2026-07-13T06:12:20.186755+00:00",
+  "data_source": "synthetic",
+  "features": [
+    "growth",
+    "stability",
+    "compliance",
+    "liquidity",
+    "concentration",
+    "leverage"
+  ],
+  "feature_window_months": 18,
+  "label_definition": "1 = persona-implied risk band is WATCH or HIGH_RISK (declining_stress, concentration_risk, inflated_gst_fraud); 0 = EXCELLENT or GOOD (healthy_growth, seasonal_stable).",
+  "temporal_split": "features computed from months 0-17 only (sub-scores recomputed on a truncated FeatureBundle); the label is persona-implied, not derived from the held-out months \u2014 no direct leakage from the tail of each applicant's history.",
+  "n_samples": 50,
+  "n_train": 35,
+  "n_test": 15,
+  "excluded_applicants": [
+    "MSME-0041",
+    "MSME-0042",
+    "MSME-0043",
+    "MSME-0044",
+    "MSME-0045",
+    "MSME-0046",
+    "MSME-0047",
+    "MSME-0048",
+    "MSME-0049",
+    "MSME-0050"
+  ],
+  "excluded_reason": "ntc_thin_file persona has only 8 months of history \u2014 too short for the 18/6 split.",
+  "train_accuracy": 1.0,
+  "test_accuracy": 0.867,
+  "test_auc": 1.0,
+  "feature_importance": {
+    "growth": 0.524,
+    "stability": 0.055,
+    "compliance": 0.024,
+    "liquidity": 0.0,
+    "concentration": 0.349,
+    "leverage": 0.048
+  },
+  "fraud_persona_recall_in_test": 1.0,
+  "honest_note": "Trained and evaluated ENTIRELY on the 60 synthetic seeded personas (RANDOM_SEED=42). Demonstrates that the six engineered sub-scores carry separable signal for persona-implied risk buckets on this seeded population (test_accuracy=0.867, test_auc=1.0). This is a feature sanity-check on 50 samples, NOT a claim of real-world credit accuracy \u2014 the UI/README must present it as 'model agreement', never as an accuracy percentage. IMPORTANT: this classifier is not the fraud-detection mechanism. Even where fraud_persona_recall_in_test=1.0 is high on this run's split, that coverage is incidental (sub-scores can pick up secondary symptoms of the fraud persona's stress) and unverified at scale \u2014 it is NOT guaranteed the way validation/cross_checks.py is, which deterministically flags 100% of the fraud persona via the GST-declared-vs-observed-inflows check (see test_cross_checks.py). Fraud review decisions must always route through cross_checks.py, never through this model."
+}

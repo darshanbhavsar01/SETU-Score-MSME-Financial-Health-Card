@@ -11,6 +11,7 @@ Routes:
   POST /score/{id}          run the full pipeline, persist, return ScoreResponse
   GET  /score/{id}          return a previously computed score (404 if none)
   POST /validate/{id}       cross-source consistency check only
+  POST /narrative/{id}      reason-code narrative (template-first, Gemini opt., §8)
 """
 
 from __future__ import annotations
@@ -23,11 +24,13 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.app.config import DATA_SOURCE_LABEL, REPO_ROOT, settings
 from backend.app.features import build_features
+from backend.app.narrative import build_narrative, estimate_worst_case_cost_note, polish_narrative
 from backend.app.repository import Repositories, get_repositories
 from backend.app.schemas import (
     ApplicantSummary,
     CrossValidationModel,
     HealthResponse,
+    NarrativeResponse,
     ScoreResponse,
     TrendPoint,
 )
@@ -53,6 +56,12 @@ def create_app(repos: Repositories | None = None) -> FastAPI:
 
     _repos = repos or get_repositories()
     app.dependency_overrides[get_repos] = lambda: _repos
+
+    # §8 startup log: prints the worst-case cost estimate whenever the optional
+    # Gemini narrative path is enabled. Silent (no line at all) when disabled —
+    # which is the default, so the public Cloud Run demo prints nothing here.
+    if settings.enable_llm_narrative:
+        print(f"[startup] {estimate_worst_case_cost_note()}")
 
     @app.get("/health", response_model=HealthResponse)
     def health(r: Repositories = Depends(get_repos)) -> HealthResponse:
@@ -129,6 +138,18 @@ def create_app(repos: Repositories | None = None) -> FastAPI:
             )
             for i in range(f.n_months)
         ]
+
+    @app.post("/narrative/{applicant_id}", response_model=NarrativeResponse)
+    def narrative(applicant_id: str, r: Repositories = Depends(get_repos)) -> NarrativeResponse:
+        if not r.applicants.exists(applicant_id):
+            raise HTTPException(status_code=404, detail=f"Unknown applicant {applicant_id}")
+        payload = r.scores.get_score(applicant_id)
+        if payload is None:
+            payload = score_applicant(applicant_id, r)
+            r.scores.save_score(applicant_id, payload, flags=payload["cross_validation"]["flags"])
+        base_text = build_narrative(payload)
+        text, source = polish_narrative(payload, base_text)
+        return NarrativeResponse(applicant_id=applicant_id, narrative=text, source=source)
 
     @app.post("/validate/{applicant_id}", response_model=CrossValidationModel)
     def validate(applicant_id: str, r: Repositories = Depends(get_repos)) -> CrossValidationModel:

@@ -374,3 +374,7 @@ deploy and note the actual figure in the README for honesty.
 10. **`Dockerfile` (multi-stage) + Cloud Run deploy (§13) — required, not optional.**
     Verify the live URL works end-to-end before calling the POC done. Check GCP billing
     after first deploy and record the actual cost in the README.
+
+
+## Git Commit Guidelines
+- Do not include AI attribution or co-author lines in commit messages.

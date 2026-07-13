@@ -110,7 +110,12 @@ class Settings:
     # Optional Gemini narrative polish (§8). Off by default.
     enable_llm_narrative: bool = os.getenv("ENABLE_LLM_NARRATIVE", "false").lower() == "true"
     gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
-    # Hard cap on Gemini calls per process lifetime (§8).
+    # Second AI Studio account/key, tried only once the primary is exhausted across
+    # every model in GEMINI_MODEL_CASCADE.
+    gemini_api_key_fallback: str = os.getenv("GEMINI_API_KEY_FALLBACK", "")
+    # Hard, SQLite-persisted cap on raw Gemini API calls across the app's lifetime —
+    # survives process restarts so it is a durable budget guardrail, not a
+    # per-process allowance that resets on redeploy (§2 budget cap, §8).
     gemini_max_calls: int = 50
     gemini_max_output_tokens: int = 1000
 
@@ -120,6 +125,26 @@ class Settings:
 
 
 settings = Settings()
+
+# Ordered cascade of Gemini model IDs to try, newest/most-capable first. Each entry
+# that doesn't exist on the caller's account (or is retired) simply errors and the
+# cascade moves on — no need to keep this list perfectly in sync with what Google
+# currently ships. Override entirely via GEMINI_MODELS="model-a,model-b" if needed.
+_default_cascade = [
+    "gemini-flash-latest",       # AI Studio alias -> current best flash model
+    "gemini-3-flash",
+    "gemini-3-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
+    "gemini-1.5-flash",
+    "gemini-1.5-flash-8b",
+    "gemini-flash-lite-latest",  # AI Studio alias -> current best flash-lite model
+]
+GEMINI_MODEL_CASCADE: list[str] = [
+    m.strip() for m in os.getenv("GEMINI_MODELS", "").split(",") if m.strip()
+] or _default_cascade
 
 
 def ensure_data_dirs() -> None:

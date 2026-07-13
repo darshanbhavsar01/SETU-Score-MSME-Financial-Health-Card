@@ -56,6 +56,40 @@ def _to_bool(series: pd.Series) -> np.ndarray:
     return series.astype(bool).to_numpy()
 
 
+def truncate(f: FeatureBundle, n: int) -> FeatureBundle:
+    """Return a FeatureBundle covering only the first n months of f.
+
+    Used by model/train.py's temporal split: features are computed from an early
+    window only, so nothing from the held-out later months leaks into training.
+    payer_shares is left as-is (it is a whole-history aggregate, not a monthly
+    series) — an acceptable approximation for a sanity-check model, not the served
+    scoring path.
+    """
+    if n > f.n_months:
+        raise ValueError(f"cannot truncate {f.n_months} months to {n}")
+    bank_credit = f.bank_credit[:n]
+    emi = f.emi[:n]
+    return FeatureBundle(
+        applicant_id=f.applicant_id,
+        n_months=n,
+        blended_turnover=f.blended_turnover[:n],
+        bank_credit=bank_credit,
+        gst_declared=f.gst_declared[:n],
+        upi_total=f.upi_total[:n],
+        net_inflow=f.net_inflow[:n],
+        closing_balance=f.closing_balance[:n],
+        monthly_obligations=f.monthly_obligations[:n],
+        emi=emi,
+        gst_late_flags=f.gst_late_flags[:n],
+        gst_filing_gap_days=f.gst_filing_gap_days[:n],
+        epfo_late_flags=f.epfo_late_flags[:n],
+        payer_shares=f.payer_shares,
+        avg_monthly_inflow=float(np.mean(bank_credit)),
+        avg_emi=float(np.mean(emi)),
+        months=f.months[:n],
+    )
+
+
 def build_features(applicant_id: str, analytics: AnalyticsRepository) -> FeatureBundle:
     bank = analytics.bank_monthly(applicant_id)          # month, credit, debit, emi, salary, rent, ...
     gst = analytics.gst_returns(applicant_id)            # month, declared_turnover, filed_late, dates

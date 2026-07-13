@@ -74,6 +74,12 @@ class TrendPoint(BaseModel):
     net_inflow: float
 
 
+class NarrativeResponse(BaseModel):
+    applicant_id: str
+    narrative: str
+    source: str  # "template" | "gemini"
+
+
 class HealthResponse(BaseModel):
     status: str = "ok"
     applicants: int

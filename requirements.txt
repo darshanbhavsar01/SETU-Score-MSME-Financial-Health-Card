@@ -12,12 +12,15 @@ fastapi>=0.110,<1
 uvicorn[standard]>=0.29
 pydantic>=2.6,<3
 
-# ML layer (optional, step 7)
+# ML layer (optional, step 7) — a build/dev-time sanity check, not wired into the
+# served /score path, so it is NOT included in requirements-runtime.txt (Docker image).
 scikit-learn>=1.4
 xgboost>=2.0
+joblib>=1.3
 
-# Optional Gemini narrative (step 8, off by default)
-google-generativeai>=0.5
+# Optional Gemini narrative (step 8, off by default). google-generativeai is fully
+# deprecated (EOL) — google-genai is the current maintained SDK.
+google-genai>=0.3
 
 # Tooling / tests
 pytest>=8.0

@@ -1,0 +1,26 @@
+# One-command local dev stack (CLAUDE.md §3, §9): `docker compose up --build`
+# brings up the whole system — data, scoring, ML, UI — with NO cloud credentials
+# required. Docker Compose auto-loads a `.env` file from this directory to populate
+# the ${VAR} interpolations below; if you don't have one, every var defaults to
+# empty/false and the app runs entirely on templates with synthetic data only.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    environment:
+      PORT: "8080"
+      # Optional Gemini narrative polish (§8) — off unless you set these in .env.
+      ENABLE_LLM_NARRATIVE: ${ENABLE_LLM_NARRATIVE:-false}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_API_KEY_FALLBACK: ${GEMINI_API_KEY_FALLBACK:-}
+      SETU_PROD_MODE: ${SETU_PROD_MODE:-false}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3

@@ -1,0 +1,31 @@
+# Keep the Cloud Build upload small and the image clean (CLAUDE.md §13).
+
+.git/
+.github/
+.claude/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Local dev artifacts — the image bakes its OWN copy of data/ at build time via
+# `make data`; never copy a stale local dataset in.
+data/
+model/model.pkl
+model/metrics.json
+
+# Frontend — built fresh in the frontend-build stage from source; node_modules and
+# any locally-built dist must not leak into the build context.
+frontend/node_modules/
+frontend/dist/
+
+# Env/secrets
+.env
+.env.*
+!.env.example
+
+# Docs / misc — not needed at runtime
+deploy/
+*.md
