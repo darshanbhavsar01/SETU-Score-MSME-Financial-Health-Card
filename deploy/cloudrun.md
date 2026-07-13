@@ -72,7 +72,7 @@ actual figure.
 
 - **URL:** https://setu-score-229692962627.asia-south1.run.app
 - **Project / region:** `main-aura-398409` / `asia-south1`
-- **Revision:** `setu-score-00001-k5k`
+- **Revision:** `setu-score-00002-h8h` (adds the landing page, footer credit, and README diagrams; previously `setu-score-00001-k5k`)
 - **Config:** `min-instances=0`, `max-instances=1`, `memory=512Mi`, `cpu=1`,
   `ENABLE_LLM_NARRATIVE=false` (public link runs on templates, needs no key)
 - **Post-deploy smoke test:** `GET /health` → 60 applicants; `POST /score/MSME-0001`

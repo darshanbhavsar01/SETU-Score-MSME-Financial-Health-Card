@@ -160,7 +160,7 @@ setu-score/
 ## Architecture diagram
 
 ```mermaid
-graph LR
+graph TD
     subgraph Client["Browser"]
         UI["React + Vite\nHome · Console · Health Card"]
     end
