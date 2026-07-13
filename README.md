@@ -1,6 +1,6 @@
 # SETU Score — MSME Financial Health Card
 
-**IDBI Innovate 2026 · Track 3.** A credit-invisible-MSME scoring POC that aggregates
+A credit-invisible-MSME scoring POC that aggregates
 GST returns, UPI settlement flows, bank statements, and EPFO payroll into an
 explainable 0–900 **SETU Score**, a six-axis risk radar, cross-source fraud
 validation, and a conservative working-capital limit recommendation — served as a
@@ -97,7 +97,6 @@ Skippable — the served API never depends on this; see
 
 ```
 setu-score/
-├── CLAUDE.md                    # full build specification this repo was built against
 ├── README.md                    # this file
 ├── Makefile                     # make data / train / test / demo / deploy
 ├── docker-compose.yml           # one-command local stack
@@ -365,7 +364,7 @@ rank-orders correctly on seeded personas" proof, **not** a real-world accuracy c
 
 ## Deployment (Cloud Run)
 
-Mandatory per the brief — the submission needs a live link. See
+See
 [`deploy/cloudrun.md`](deploy/cloudrun.md) for the exact commands (also runnable via
 `make deploy`). Architecture: one multi-stage `Dockerfile` bakes the synthetic
 dataset in at build time (read-only at runtime), `min-instances=0` /
@@ -412,12 +411,6 @@ Read this section before treating any number here as more than it is.
   personas" — never as a real-world accuracy or fraud-detection-rate claim. If a
   metric looks weak anywhere in this repo, the fix path is noted next to it rather
   than hidden.
-
----
-
-See [`CLAUDE.md`](CLAUDE.md) for the full specification this repo was built against
-— every architecture decision, the build order, and every constraint (budget,
-guardrails, what's explicitly out of scope) are documented there in detail.
 
 ---
 
