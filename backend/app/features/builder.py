@@ -7,7 +7,7 @@ consume. Pure-python from here on — no SQL, no I/O beyond the repository inter
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import pandas as pd
@@ -46,6 +46,9 @@ class FeatureBundle:
     # Convenience scalars
     avg_monthly_inflow: float
     avg_emi: float
+
+    # Month labels ("YYYY-MM"), aligned with the arrays — used by the trend view.
+    months: list[str] = field(default_factory=list)
 
 
 def _to_bool(series: pd.Series) -> np.ndarray:
@@ -110,4 +113,5 @@ def build_features(applicant_id: str, analytics: AnalyticsRepository) -> Feature
         payer_shares=payers["share"].to_numpy(dtype=float),
         avg_monthly_inflow=float(np.mean(bank_credit)),
         avg_emi=float(np.mean(merged["emi"].to_numpy(dtype=float))),
+        months=[str(p) for p in merged["mk"]],
     )

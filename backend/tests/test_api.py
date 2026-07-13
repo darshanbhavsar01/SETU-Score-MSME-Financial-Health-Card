@@ -97,6 +97,16 @@ def test_get_score_before_scoring_404(client):
     assert client.get("/score/MSME-0002").status_code == 404
 
 
+def test_trend_endpoint(client):
+    # 24 aligned monthly points; the fraud firm's declared GST rides far above bank.
+    points = client.get("/applicants/MSME-0051/trend").json()
+    assert len(points) == 24
+    assert set(points[0]) == {"month", "gst_declared", "bank_credit", "upi_total", "net_inflow"}
+    assert points[0]["gst_declared"] > 2 * points[0]["bank_credit"]
+    # NTC thin file has only 8 months.
+    assert len(client.get("/applicants/MSME-0041/trend").json()) == 8
+
+
 def test_validate_endpoint(client):
     fraud = client.post("/validate/MSME-0051").json()
     assert fraud["consistency_score"] == 0

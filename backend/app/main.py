@@ -29,6 +29,7 @@ from backend.app.schemas import (
     CrossValidationModel,
     HealthResponse,
     ScoreResponse,
+    TrendPoint,
 )
 from backend.app.scoring.pipeline import score_applicant
 from backend.app.validation.cross_checks import cross_validate
@@ -112,6 +113,22 @@ def create_app(repos: Repositories | None = None) -> FastAPI:
         if payload is None:
             raise HTTPException(status_code=404, detail=f"{applicant_id} not scored yet")
         return ScoreResponse(**payload)
+
+    @app.get("/applicants/{applicant_id}/trend", response_model=list[TrendPoint])
+    def trend(applicant_id: str, r: Repositories = Depends(get_repos)) -> list[TrendPoint]:
+        if not r.applicants.exists(applicant_id):
+            raise HTTPException(status_code=404, detail=f"Unknown applicant {applicant_id}")
+        f = build_features(applicant_id, r.analytics)
+        return [
+            TrendPoint(
+                month=f.months[i],
+                gst_declared=float(f.gst_declared[i]),
+                bank_credit=float(f.bank_credit[i]),
+                upi_total=float(f.upi_total[i]),
+                net_inflow=float(f.net_inflow[i]),
+            )
+            for i in range(f.n_months)
+        ]
 
     @app.post("/validate/{applicant_id}", response_model=CrossValidationModel)
     def validate(applicant_id: str, r: Repositories = Depends(get_repos)) -> CrossValidationModel:

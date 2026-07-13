@@ -63,6 +63,17 @@ class ApplicantSummary(BaseModel):
     recommendation: str | None = None
 
 
+class TrendPoint(BaseModel):
+    """One month of the inflow trend. Plotting declared GST vs observed bank credits
+    makes the fraud persona's over-declaration visible as a diverging line."""
+
+    month: str
+    gst_declared: float
+    bank_credit: float
+    upi_total: float
+    net_inflow: float
+
+
 class HealthResponse(BaseModel):
     status: str = "ok"
     applicants: int

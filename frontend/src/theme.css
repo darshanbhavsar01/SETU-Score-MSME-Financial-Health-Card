@@ -1,0 +1,104 @@
+/* SETU Score theme — colors sourced from the validated data-viz reference palette.
+   Light + dark are both selected (dark steps are chosen for the dark surface, not a
+   flip). Roles are referenced by name so a value swaps in one place. */
+
+:root {
+  /* Surfaces & ink */
+  --page: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --surface-2: #f2f2ee;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --gridline: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+
+  /* Categorical (fixed slot order from the reference theme) */
+  --series-1: #2a78d6; /* blue  — GST / primary */
+  --series-2: #1baf7a; /* aqua  — bank / secondary */
+  --series-accent: #4a3aa7; /* violet — UPI */
+
+  /* Status (fixed, never themed) — paired with a label wherever used */
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+
+  /* Band colors (ordinal risk tiers, each always shown with its band label) */
+  --band-excellent: #0ca30c;
+  --band-good: #2a78d6;
+  --band-watch: #fab219;
+  --band-high_risk: #d03b3b;
+
+  --shadow: 0 1px 2px rgba(11, 11, 11, 0.06), 0 8px 24px rgba(11, 11, 11, 0.06);
+  --radius: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --surface-2: #232321;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --gridline: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+
+    --series-1: #3987e5;
+    --series-2: #199e70;
+    --series-accent: #9085e9;
+
+    --band-excellent: #0ca30c;
+    --band-good: #3987e5;
+    --band-watch: #fab219;
+    --band-high_risk: #d03b3b;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.45;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--series-1);
+}
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
