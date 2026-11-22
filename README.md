@@ -13,7 +13,7 @@ console, and a Health Card UI in front of it.
 > hard-coded or pre-baked. See [Limitations](#limitations) for exactly what that
 > does and doesn't prove.
 
-**Live demo:** https://setu-score-229692962627.asia-south1.run.app
+**Live demo:** offline. The Cloud Run instance was taken down after the event to keep cloud cost at zero. Watch the demo video below, or [run it locally](#setup--running-locally) in a few minutes (no keys needed).
 
 **Demo Video:** https://drive.google.com/drive/folders/12wzXLsdcdSuMtblY_t7Io-WKIj52qJ0a?usp=sharing
 
@@ -372,10 +372,10 @@ See
 dataset in at build time (read-only at runtime), `min-instances=0` /
 `max-instances=1` so it scales to zero between visits and costs nothing when idle.
 
-**Live URL:** https://setu-score-229692962627.asia-south1.run.app
+**Live URL:** decommissioned after the event; redeploy with the commands in `deploy/cloudrun.md`.
 
 Post-deploy smoke test: `GET /health`, `GET /applicants`, and `POST /score/MSME-0001`
-were verified against the live URL — the score response is a **byte-exact match**
+were verified against the deployed URL — the score response is a **byte-exact match**
 (fields other than `scored_at`) against
 [`backend/tests/golden/score_healthy_growth.json`](backend/tests/golden/score_healthy_growth.json).
 Cost: within the Cloud Run always-free tier (`min-instances=0`, a handful of smoke

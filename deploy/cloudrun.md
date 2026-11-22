@@ -68,9 +68,9 @@ hackathon demo (judges clicking through a handful of times) stays inside that fr
 tier. Check **GCP Console → Billing → Reports** after the first deploy for the
 actual figure.
 
-## Deployed
+## Deployed (event build, now decommissioned)
 
-- **URL:** https://setu-score-229692962627.asia-south1.run.app
+- **URL:** decommissioned after the event (service deleted to keep cost at zero)
 - **Project / region:** `main-aura-398409` / `asia-south1`
 - **Revision:** `setu-score-00002-h8h` (adds the landing page, footer credit, and README diagrams; previously `setu-score-00001-k5k`)
 - **Config:** `min-instances=0`, `max-instances=1`, `memory=512Mi`, `cpu=1`,
